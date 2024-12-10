@@ -69,6 +69,11 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <excludes>
+            <exclude>com/hospital/auto/diagnostic/AutoDiagnosticApplication.class</exclude>
+          </excludes>
+        </configuration>
       </plugin>
     </plugins>
   </build>
