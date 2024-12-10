@@ -1,9 +1,7 @@
 name: Build and Analyze
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch: # Ajoute un déclenchement manuel
 
 jobs:
   build:
