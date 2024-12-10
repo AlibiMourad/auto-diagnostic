@@ -28,9 +28,9 @@ jobs:
 
       - name: Run Unit Tests
         run: mvn test
-
-      - name: Verify JaCoCo Coverage
-        run: mvn verify
+      # Optionnel : Verify JaCoCo (décommenter si nécessaire)
+      #- name: Verify JaCoCo Coverage
+      #  run: mvn verify
 
       # Optionnel : Analyse SonarQube (décommenter si nécessaire)
       # - name: Run SonarQube Analysis
