@@ -8,7 +8,7 @@ ENV APP_HOME=/app
 WORKDIR $APP_HOME
 
 # Copier le fichier JAR généré par Maven dans l'image Docker
-COPY target/*.jar $APP_HOME/
+COPY target/*.jar $APP_HOME/app.jar
 
 # Exposer le port sur lequel l'application Spring Boot écoute (par défaut 8080)
 EXPOSE 8080
