@@ -82,24 +82,19 @@ Le but de ce projet est de :
    mvn test
    ```
 
-4. **Lancer l'Application**
-   Pour exécuter le programme principal :
-   ```bash
-   mvn exec:java -Dexec.mainClass="com.hospital.auto.diagnostic.services.HealthIndexProcessor"
-   ```
 
 5. **Créer l'Image Docker**
    Si vous souhaitez exécuter le projet dans un conteneur Docker :
-    - Créez l'image Docker avec la commande suivante :
-      ```bash
-      mvn clean package
-      docker build -t auto-diagnostic .
-      ```
+   - Créez l'image Docker avec la commande suivante :
+     ```bash
+     mvn clean package
+     docker build -t auto-diagnostic .
+     ```
 
-    - Exécutez le conteneur Docker :
-      ```bash
-      docker run --rm auto-diagnostic
-      ```
+   - Exécutez le conteneur Docker :
+     ```bash
+     docker run --rm auto-diagnostic
+     ```
 
 ---
 
@@ -138,8 +133,8 @@ Ce projet utilise **GitHub Actions** pour automatiser les tests et la générati
    ```
 
 2. **Exécution Automatique** :
-    - Le pipeline CI est déclenché à chaque push sur la branche `main`.
-    - Les tests sont exécutés automatiquement et toute modification du code est validée par des tests.
+   - Le pipeline CI est déclenché à chaque push sur la branche `main`.
+   - Les tests sont exécutés automatiquement et toute modification du code est validée par des tests.
 
 ---
 

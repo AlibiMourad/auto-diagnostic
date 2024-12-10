@@ -1,12 +1,17 @@
-# Utiliser une image Java 21
-FROM openjdk:21-jdk-slim
-LABEL authors="alibiMourad"
+# Utiliser une image de base avec Java 21
+FROM openjdk:21-slim
 
-# Définir le répertoire de travail
-WORKDIR /app
+# Définir les variables d'environnement
+ENV APP_HOME=/app
 
-# Copier le fichier JAR
-COPY target/auto-diagnostic-1.0-SNAPSHOT.jar app.jar
+# Créer un répertoire pour l'application
+WORKDIR $APP_HOME
 
-# Exécuter l'application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Copier le fichier JAR généré par Maven dans l'image Docker
+COPY target/*.jar app.jar
+
+# Exposer le port sur lequel l'application Spring Boot écoute (par défaut 8080)
+EXPOSE 8080
+
+# Commande pour exécuter l'application
+CMD ["java", "-jar", "app.jar"]
