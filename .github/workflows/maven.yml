@@ -27,3 +27,5 @@ jobs:
         run: mvn sonar:sonar -Dsonar.projectKey=auto-diagnostic \
           -Dsonar.host.url=http://localhost:9000\
           -Dsonar.login=$SONAR_TOKEN
+      - name: Verify JaCoCo Coverage
+        run: mvn verify
