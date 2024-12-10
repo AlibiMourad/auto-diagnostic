@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Tests pour vérifier la méthode main de HealthIndexProcessor.
  */
-public class HealthIndexProcessorMainTest {
+class HealthIndexProcessorMainTest {
 
     @Test
-    public void testMainMethod() {
+    void testMainMethod() {
         // Capture de la sortie standard
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream originalOut = System.out;

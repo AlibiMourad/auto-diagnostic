@@ -1,13 +1,16 @@
 package com.hospital.auto.diagnostic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * Classe pour diagnostiquer les pathologies en fonction de l'index de santé.
  */
 public class HealthIndexProcessor {
+
+    private static final Logger logger = LoggerFactory.getLogger(HealthIndexProcessor.class);
 
     /**
      * Diagnostique les pathologies à partir d'un index de santé.
@@ -23,7 +26,7 @@ public class HealthIndexProcessor {
                 Pathology.CARDIOLOGY.diagnose(healthIndex),
                 Pathology.TRAUMATOLOGY.diagnose(healthIndex)
         ).flatMap(Stream::ofNullable) // Ignore les nulls
-         .collect(Collectors.toList());
+         .toList();
     }
 
     /**
@@ -47,9 +50,9 @@ public class HealthIndexProcessor {
         int[] testIndices = {3, 5, 15, 7, 33, 55, -1, 0};
         for (int index : testIndices) {
             try {
-                System.out.println("Index " + index + " => " + processor.diagnose(index));
+                logger.info("Index {} => {}", index, processor.diagnose(index));
             } catch (IllegalArgumentException e) {
-                System.out.println("Index " + index + " => Erreur : " + e.getMessage());
+                logger.error("Index {} => Erreur : {}", index, e.getMessage());
             }
         }
     }

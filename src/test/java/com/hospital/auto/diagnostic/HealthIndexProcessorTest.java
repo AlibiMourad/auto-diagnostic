@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests unitaires pour HealthIndexProcessor.
  */
-public class HealthIndexProcessorTest {
+class HealthIndexProcessorTest {
 
     private final HealthIndexProcessor processor = new HealthIndexProcessor();
 
@@ -36,14 +36,14 @@ public class HealthIndexProcessorTest {
      */
     @ParameterizedTest
     @MethodSource("provideTestCases")
-    public void testDiagnose(TestCase testCase) {
+    void testDiagnose(TestCase testCase) {
         List<String> diagnoses = processor.diagnose(testCase.healthIndex);
         assertEquals(testCase.expectedPathologies, diagnoses,
                 "Diagnoses incorrect for health index: " + testCase.healthIndex);
     }
 
     @Test
-    public void testInvalidHealthIndexZero() {
+    void testInvalidHealthIndexZero() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             processor.diagnose(0);
         });
@@ -51,7 +51,7 @@ public class HealthIndexProcessorTest {
     }
 
     @Test
-    public void testInvalidHealthIndexNegative() {
+    void testInvalidHealthIndexNegative() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             processor.diagnose(-10);
         });
