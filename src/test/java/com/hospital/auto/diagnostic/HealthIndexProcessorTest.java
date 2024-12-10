@@ -1,54 +1,73 @@
 package com.hospital.auto.diagnostic;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Classe de test pour HealthIndexProcessor.
+ * Tests unitaires pour HealthIndexProcessor.
  */
 public class HealthIndexProcessorTest {
 
-    @Test
-    public void testNoPathologiesForZero() {
-        HealthIndexProcessor processor = new HealthIndexProcessor();
-        assertTrue(processor.diagnose(0).isEmpty(), "Aucun pathologie pour un index de 0");
+    private final HealthIndexProcessor processor = new HealthIndexProcessor();
+
+    /**
+     * Génère les cas de test pour le test paramétré.
+     * @return Un stream des cas de test.
+     */
+    static Stream<TestCase> provideTestCases() {
+        return Stream.of(
+                new TestCase(3, List.of("Cardiologie")),
+                new TestCase(5, List.of("Traumatologie")),
+                new TestCase(15, List.of("Cardiologie", "Traumatologie")),
+                new TestCase(7, List.of()), // Aucun multiple
+                new TestCase(33, List.of("Cardiologie")),
+                new TestCase(55, List.of("Traumatologie"))
+        );
+    }
+
+    /**
+     * Test paramétré utilisant MethodSource.
+     */
+    @ParameterizedTest
+    @MethodSource("provideTestCases")
+    public void testDiagnose(TestCase testCase) {
+        List<String> diagnoses = processor.diagnose(testCase.healthIndex);
+        assertEquals(testCase.expectedPathologies, diagnoses,
+                "Diagnoses incorrect for health index: " + testCase.healthIndex);
     }
 
     @Test
-    public void testNoPathologiesForNegativeIndex() {
-        HealthIndexProcessor processor = new HealthIndexProcessor();
-        assertTrue(processor.diagnose(-15).isEmpty(), "Aucune pathologie pour un index négatif");
+    public void testInvalidHealthIndexZero() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            processor.diagnose(0);
+        });
+        assertEquals("L'index de santé doit être un entier positif.", exception.getMessage());
     }
 
     @Test
-    public void testCardiologyOnly() {
-        HealthIndexProcessor processor = new HealthIndexProcessor();
-        assertEquals(List.of("Cardiologie"), processor.diagnose(3), "Cardiologie uniquement pour un multiple de 3");
+    public void testInvalidHealthIndexNegative() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            processor.diagnose(-10);
+        });
+        assertEquals("L'index de santé doit être un entier positif.", exception.getMessage());
     }
 
-    @Test
-    public void testTraumatologyOnly() {
-        HealthIndexProcessor processor = new HealthIndexProcessor();
-        assertEquals(List.of("Traumatologie"), processor.diagnose(5), "Traumatologie uniquement pour un multiple de 5");
-    }
+    /**
+     * Classe interne pour représenter les cas de test.
+     */
+    private static class TestCase {
+        int healthIndex;
+        List<String> expectedPathologies;
 
-    @Test
-    public void testCardiologyAndTraumatology() {
-        HealthIndexProcessor processor = new HealthIndexProcessor();
-        assertEquals(List.of("Cardiologie", "Traumatologie"), processor.diagnose(15), "Les deux pathologies pour un multiple de 3 et 5");
-    }
-
-    @Test
-    public void testNoPathologiesForNonMultiples() {
-        HealthIndexProcessor processor = new HealthIndexProcessor();
-        assertTrue(processor.diagnose(7).isEmpty(), "Aucune pathologie pour un index non multiple de 3 ou 5");
-    }
-
-    @Test
-    public void testLargeIndex() {
-        HealthIndexProcessor processor = new HealthIndexProcessor();
-        assertEquals(List.of("Cardiologie", "Traumatologie"), processor.diagnose(15000), "Grand index multiple de 3 et 5");
+        TestCase(int healthIndex, List<String> expectedPathologies) {
+            this.healthIndex = healthIndex;
+            this.expectedPathologies = expectedPathologies;
+        }
     }
 }

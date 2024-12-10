@@ -1,46 +1,76 @@
 package com.hospital.auto.diagnostic;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Classe pour traiter l'index de santé et déterminer les pathologies correspondantes.
+ * Classe pour diagnostiquer les pathologies en fonction de l'index de santé.
  */
 public class HealthIndexProcessor {
 
     /**
-     * Diagnostique les pathologies en fonction de l'index de santé.
+     * Diagnostique les pathologies à partir d'un index de santé.
      * 
-     * @param healthIndex L'index de santé à diagnostiquer.
-     * @return Une liste des pathologies diagnostiquées.
+     * @param healthIndex L'index de santé du patient.
+     * @return Une liste des pathologies détectées.
+     * @throws IllegalArgumentException Si l'index est invalide.
      */
     public List<String> diagnose(int healthIndex) {
-        List<String> diagnoses = new ArrayList<>();
+        validateHealthIndex(healthIndex);
 
-        if (healthIndex <= 0) {
-            return diagnoses; // Pas de pathologie pour des index non valides
-        }
-
-        if (healthIndex % 3 == 0) {
-            diagnoses.add("Cardiologie");
-        }
-        if (healthIndex % 5 == 0) {
-            diagnoses.add("Traumatologie");
-        }
-
-        return diagnoses;
+        return Stream.of(
+                Pathology.CARDIOLOGY.diagnose(healthIndex),
+                Pathology.TRAUMATOLOGY.diagnose(healthIndex)
+        ).flatMap(Stream::ofNullable) // Ignore les nulls
+         .collect(Collectors.toList());
     }
 
     /**
-     * Point d'entrée principal pour tester la fonctionnalité.
+     * Valide que l'index de santé est positif.
+     * 
+     * @param healthIndex L'index de santé à valider.
+     * @throws IllegalArgumentException Si l'index est non valide.
+     */
+    private void validateHealthIndex(int healthIndex) {
+        if (healthIndex <= 0) {
+            throw new IllegalArgumentException("L'index de santé doit être un entier positif.");
+        }
+    }
+
+    /**
+     * Point d'entrée principal pour exécuter les diagnostics.
      */
     public static void main(String[] args) {
         HealthIndexProcessor processor = new HealthIndexProcessor();
 
-        // Tests simples avec des indices de santé prédéfinis
-        int[] testIndices = {0, -15, 3, 5, 15, 7, 33, 55};
+        int[] testIndices = {3, 5, 15, 7, 33, 55, -1, 0};
         for (int index : testIndices) {
-            System.out.println("Index " + index + " => " + processor.diagnose(index));
+            try {
+                System.out.println("Index " + index + " => " + processor.diagnose(index));
+            } catch (IllegalArgumentException e) {
+                System.out.println("Index " + index + " => Erreur : " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Enum pour définir les pathologies possibles.
+     */
+    private enum Pathology {
+        CARDIOLOGY(3, "Cardiologie"),
+        TRAUMATOLOGY(5, "Traumatologie");
+
+        private final int factor;
+        private final String description;
+
+        Pathology(int factor, String description) {
+            this.factor = factor;
+            this.description = description;
+        }
+
+        public String diagnose(int healthIndex) {
+            return healthIndex % factor == 0 ? description : null;
         }
     }
 }
