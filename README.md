@@ -85,7 +85,7 @@ Le but de ce projet est de :
 4. **Lancer l'Application**
    Pour exécuter le programme principal :
    ```bash
-   mvn exec:java -Dexec.mainClass="com.hospital.auto.diagnostic.HealthIndexProcessor"
+   mvn exec:java -Dexec.mainClass="com.hospital.auto.diagnostic.services.HealthIndexProcessor"
    ```
 
 5. **Créer l'Image Docker**

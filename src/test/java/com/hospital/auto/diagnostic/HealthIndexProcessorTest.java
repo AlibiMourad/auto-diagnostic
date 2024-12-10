@@ -1,5 +1,6 @@
 package com.hospital.auto.diagnostic;
 
+import com.hospital.auto.diagnostic.services.HealthIndexProcessor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
